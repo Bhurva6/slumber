@@ -2,7 +2,7 @@
 
 import Head from 'next/head';
 import styles from './styles/Home.module.css';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
@@ -85,6 +85,41 @@ const Home: FC = () => {
   const [currentSentence, setCurrentSentence] = useState(0);
   const [currentChar, setCurrentChar] = useState(0);
   const [inputText, setInputText] = useState('');
+  const [isMuted, setIsMuted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+
+
+  useEffect(() => {
+    audioRef.current = new Audio('/bgm.mp3');
+    if (audioRef.current) {
+      audioRef.current.loop = true;
+    }
+  
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = "";
+      }
+    };
+  }, []);
+  const toggleAudio = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play().catch(error => console.log("Audio play failed:", error));
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+  const toggleMute = () => {
+    if (audioRef.current) {
+      audioRef.current.muted = !audioRef.current.muted;
+      setIsMuted(!isMuted);
+    }
+  };
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -116,7 +151,7 @@ const Home: FC = () => {
       <div className={styles.backgroundContainer}></div>
       <Head>
         <title>Slumber</title>
-        <meta name="description" content="Generate bedtime stories for kids with ease!" />
+        <meta name="description" content="Sleep better" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
@@ -138,6 +173,10 @@ const Home: FC = () => {
           Can&apos;t decide? Surprise me!🪄
         </button>
       </main>
+      <button onClick={toggleAudio} className={styles.audioControl}>
+  {isPlaying ? "🔇" : "🔈"}
+</button>
+
       <footer className={styles.footer}>
         <a href='https://buildspace.so/'>made @ buildspace for n&w s5 🔨</a>
       </footer>

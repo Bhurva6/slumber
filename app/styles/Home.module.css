@@ -116,3 +116,18 @@
   position: absolute;
   bottom: 0;
 }
+.audioControl {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  color: #ffffff; /* Adjust color as needed */
+}

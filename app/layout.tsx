@@ -8,6 +8,10 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Slumber - Sleep Better",
   description: "Your bedtime buddy",
+  icons: {
+    icon: '/favicon.png', 
+    
+  },
 };
 
 export default function RootLayout({
