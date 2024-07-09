@@ -174,7 +174,7 @@ const Home: FC = () => {
         </button>
       </main>
       <button onClick={toggleAudio} className={styles.audioControl}>
-  {isPlaying ? "🔇" : "🔈"}
+  {isPlaying ? "🔈" : "🔇"}
 </button>
 
       <footer className={styles.footer}>
