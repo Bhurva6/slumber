@@ -1,11 +1,11 @@
 "use client";
-import React from 'react';
-import { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import styles from '../styles/Story.module.css';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 
-const Story: FC = () => {
+const StoryContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [prompt, setPrompt] = useState('');
@@ -19,21 +19,16 @@ const Story: FC = () => {
     }
   }, [searchParams]);
 
-
   const handleNewPrompt = () => {
     if (isEditing) {
       if (newPrompt.trim() !== '') {
         setPrompt(newPrompt);
         setIsEditing(false);
-        // Update the URL with the new prompt
         router.push(`/story?prompt=${encodeURIComponent(newPrompt)}`);
-        // Here you would typically call an API to generate a new story
       } else {
-        // Handle empty prompt (e.g., show an error message)
         alert('Please enter a prompt');
       }
     } else {
-      // Switch to editing mode
       setIsEditing(true);
       setNewPrompt(prompt);
     }
@@ -73,5 +68,7 @@ const Story: FC = () => {
     </div>
   );
 }
+
+const Story = dynamic(() => Promise.resolve(StoryContent), { ssr: false });
 
 export default Story;
