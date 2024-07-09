@@ -1,0 +1,96 @@
+/* Container styles */
+.container {
+  position: relative; /* Ensure relative positioning */
+  min-height: 100vh; /* Minimum height of viewport */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.backgroundImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("/new.gif"); /* Background image */
+  background-size: cover; /* Cover entire container */
+  background-position: center; /* Center the background image */
+  opacity: 0.5; /* Opacity for background */
+  z-index: -1; /* Push background behind other content */
+}
+
+/* Box container styles */
+.boxcontainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  width: 100%; /* Take full width of container */
+}
+
+/* Title styles */
+.title {
+  font-size: 4rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-weight: bold;
+  line-height: 1.15;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: white; /* Text color */
+}
+
+/* Subtitle styles */
+.subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: white; /* Text color */
+}
+
+/* Grid container styles */
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  gap: 1rem;
+  margin-bottom: 2rem;
+  width: 100%; /* Take full width of container */
+}
+
+/* Box and AdditionalBox styles */
+.box, .additionalBox {
+  background-color: violet; /* Default background color */
+  border-radius: 15px; /* Rounded corners */
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: white; /* Text color */
+  text-align: center; /* Center text */
+}
+
+/* Hover styles */
+.box:hover, .additionalBox:hover {
+  background-color: coral; /* Hover background color */
+}
+
+/* AdditionalBox styles */
+.additionalBox {
+  max-width: 300px; /* Maximum width */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .gridContainer {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .gridContainer {
+    grid-template-columns: 1fr; /* 1 column on small screens */
+  }
+}

@@ -1,0 +1,95 @@
+.backArrow {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.backArrow:hover {
+  color: #0070f3;
+}
+
+.pageContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.backgroundContainer {
+  min-height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/story.gif');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
+}
+
+.topContainer {
+  width: 80%;
+  max-width: 800px;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  color: black;
+
+}
+.promptInput {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+
+.title {
+  font-weight: bold; 
+  padding-bottom: 2rem;
+  margin: 0;
+  line-height: 1.15;
+  font-size: 6rem;
+  font-weight: bold;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.button {
+  padding: 0.5rem 1rem;
+  background-color: violet;
+  cursor: pointer;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #0051a2;
+}
+
+.centerContainer {
+  width: 80%;
+  max-width: 800px;
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color: black;
+  text-align: center;
+}
