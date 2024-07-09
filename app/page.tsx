@@ -72,7 +72,7 @@ const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 
 
 const sentences = [
-  "I'd love to hear a story about fairies",
+  `I'd love to hear a story about fairies`,
   "Tell me a story about a brave knight and a dragon",
   "Can you tell me a story about rockets?",
   "Tell me a story about Tom Sawyer",
@@ -135,7 +135,7 @@ const Home: FC = () => {
           </button>
         </div>
         <button className={`${styles.button} ${styles.surpriseButton}`} onClick={newStory}>
-          Can't decide? Surprise me!🪄
+          Can&apos;t decide? Surprise me!🪄
         </button>
       </main>
       <footer className={styles.footer}>
