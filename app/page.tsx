@@ -5,71 +5,7 @@ import styles from './styles/Home.module.css';
 import { FC, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-
-import {
-  GoogleGenerativeAI,
-  HarmCategory,
-  HarmBlockThreshold,
-} from "@google/generative-ai"
-
-const MODEL_NAME = "gemin-1.0-pro";
-const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY as string;
-
-async function runChat(prompt: string) {
-  const genAI = new GoogleGenerativeAI(API_KEY);
-  const model = genAI.getGenerativeModel({ model: MODEL_NAME });
-
-  const generationConfig = {
-    temperature: 0.9,
-    topK: 1,
-    topP: 1,
-    maxOutputTokens: 2048,
-  };
-
-  const safetySettings = [
-    {
-      category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-      threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-    },
-    {
-      category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-      threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-    },
-    {
-      category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-      threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-    },
-    {
-      category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-      threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-    },
-  ];
-
-  const chat = model.startChat({
-    generationConfig,
-    safetySettings,
-    history: [
-      {
-        role: "user",
-        parts: [{ text: "HELLO" }],
-      },
-      {
-        role: "model",
-        parts: [{ text: "Hello there! How can I assist you today?" }],
-      },
-    ],
-  });
-
-  const result = await chat.sendMessage(prompt);
-  const response = result.response;
-  console.log(response.text());
-}
-const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  event.preventDefault();
-  const prompt = (event.target as HTMLFormElement)?.prompt?.value || "";
-  runChat(prompt);
-};
-
+import { generateStory } from './actions';
 
 const sentences = [
   `I'd love to hear a story about fairies`,
@@ -88,8 +24,10 @@ const Home: FC = () => {
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-
-
+  const [generatedStory, setGeneratedStory] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     audioRef.current = new Audio('/bgm.mp3');
@@ -104,6 +42,7 @@ const Home: FC = () => {
       }
     };
   }, []);
+
   const toggleAudio = () => {
     if (audioRef.current) {
       if (isPlaying) {
@@ -114,6 +53,7 @@ const Home: FC = () => {
       setIsPlaying(!isPlaying);
     }
   };
+
   const toggleMute = () => {
     if (audioRef.current) {
       audioRef.current.muted = !audioRef.current.muted;
@@ -138,10 +78,38 @@ const Home: FC = () => {
     return () => clearTimeout(timeoutId);
   }, [placeholder, currentChar, currentSentence]);
 
-  const genStory = () => {
-    const encodedText = encodeURIComponent(inputText || placeholder);
-    router.push(`/story?prompt=${encodedText}`);
+async function onSubmit() {
+  setIsLoading(true)
+  await generateStory(prompt)
+  setIsLoading(false)
+}
+
+
+  const genStory = async () => {
+    setIsGenerating(true);
+    setError(null);
+    try {
+      const response = await fetch('/api/generateStory', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: inputText }),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      setGeneratedStory(data.story);
+    } catch (error) {
+      console.error('Error generating story:', error);
+      setError(error instanceof Error ? error.message : 'An unknown error occurred');
+    } finally {
+      setIsGenerating(false);
+    }
   };
+
   const newStory = () => {
     router.push('/newStory');
   };
@@ -165,18 +133,27 @@ const Home: FC = () => {
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
           />
-          <button className={`${styles.button} ${styles.anotherButton}`} onClick={genStory}>
-            Generate story✨
+          <button 
+            className={`${styles.button} ${styles.anotherButton}`} 
+            onClick={() => onSubmit()}
+            disabled={isGenerating}
+          >
+            {isGenerating ? 'Generating...' : 'Generate story✨'}
           </button>
         </div>
         <button className={`${styles.button} ${styles.surpriseButton}`} onClick={newStory}>
           Can&apos;t decide? Surprise me!🪄
         </button>
+        {generatedStory && (
+          <div className={styles.storyContainer}>
+            <h2>Generated Story:</h2>
+            <p>{generatedStory}</p>
+          </div>
+        )}
       </main>
       <button onClick={toggleAudio} className={styles.audioControl}>
-  {isPlaying ? "🔈" : "🔇"}
-</button>
-
+        {isPlaying ? "🔈" : "🔇"}
+      </button>
       <footer className={styles.footer}>
         <a href='https://buildspace.so/'>made @ buildspace for n&w s5 🔨</a>
       </footer>

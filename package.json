@@ -5,13 +5,14 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "npm run dev",
     "lint": "next lint"
   },
   "dependencies": {
     "@google/generative-ai": "^0.2.1",
     "dotenv": "^16.4.5",
     "next": "14.2.4",
+    "openai": "^4.52.7",
     "react": "^18",
     "react-dom": "^18"
   },
